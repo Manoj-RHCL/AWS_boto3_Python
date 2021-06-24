@@ -19,16 +19,18 @@ with open('C:\\Users\\Admin\\Downloads\\EC2.csv', 'r') as read_obj:
                 MaxCount=1,
                 MinCount=1,
                 #SubnetId='subnet-05d5abef5fe57a847',
-                UserData=open(row['UserData']).read(),
+                UserData=open(row['UserData'],encoding="utf8").read(),
                 KeyName=row['KeyName'],
-                DisableApiTermination=False,
-                InstanceInitiatedShutdownBehavior='terminate',
+                DisableApiTermination=True,
+                InstanceInitiatedShutdownBehavior='stop',
                 #PrivateIpAddress='string',
-                #SecurityGroupIds='sssd',
+                #SecurityGroups=[
+                #    'DEV-VPC-DEFAULT-SG',
+                #],
                 BlockDeviceMappings=[
-                    {'DeviceName': '/dev/xvda',
+                    {'DeviceName': '/dev/sda1',
                      'VirtualName': 'OS_DISK',
-                     'Ebs': {'VolumeType' :row['Volume_OS_Type'] },
+                     'Ebs': {'VolumeType' :row['Volume_OS_Type'], 'VolumeSize':int(row['Volume_OS_Size']) },
                      'NoDevice': ''
                     }
                     ],
@@ -41,20 +43,20 @@ with open('C:\\Users\\Admin\\Downloads\\EC2.csv', 'r') as read_obj:
                             {'Key':row['Tag_Key_3'], 'Value':row['Tag_Value_3']},
                             {'Key':row['Tag_Key_4'], 'Value':row['Tag_Value_4']},
                             {'Key':row['Tag_Key_5'], 'Value':row['Tag_Value_5']},
-                            {'Key':row['Tag_Key_6'], 'Value':row['Tag_Value_6']}
+                            {'Key':row['Tag_Key_6'], 'Value':row['Tag_Value_6']},
+                            {'Key':row['Tag_Key_7'], 'Value':row['Tag_Value_7']},
+                            {'Key':row['Tag_Key_8'], 'Value':row['Tag_Value_8']}
                         ]
                     }
                 ],
                 NetworkInterfaces= [
-                    {'AssociatePublicIpAddress': False, 'DeviceIndex': 0, 'SubnetId': row['SubnetId'] }
+                    {'AssociatePublicIpAddress': False, 'DeviceIndex': 0, 'SubnetId': row['SubnetId'], 'Groups': str(row['SecurityGroupIds',]0 }
                 ],
                 IamInstanceProfile={
                     'Name': row['IamInstanceProfile']
                 }
                 )
         print(instances['Instances'][0]['InstanceId'])
-        #waiter=ec2.get_waiter('instance_running')
-        #waiter.wait(instances['Instances'][0]['InstanceId'])
         #Function for EC2 Tags
         ec2.create_tags(
                     Resources=[instances['Instances'][0]['InstanceId']], 
@@ -64,7 +66,9 @@ with open('C:\\Users\\Admin\\Downloads\\EC2.csv', 'r') as read_obj:
                         {'Key':row['Tag_Key_3'], 'Value':row['Tag_Value_3']},
                         {'Key':row['Tag_Key_4'], 'Value':row['Tag_Value_4']},
                         {'Key':row['Tag_Key_5'], 'Value':row['Tag_Value_5']},
-                        {'Key':row['Tag_Key_6'], 'Value':row['Tag_Value_6']}])
+                        {'Key':row['Tag_Key_6'], 'Value':row['Tag_Value_6']},
+                        {'Key':row['Tag_Key_7'], 'Value':row['Tag_Value_7']},
+                        {'Key':row['Tag_Key_8'], 'Value':row['Tag_Value_8']}])
         
         count = 1
         while (count <= int(row['Volume_Count'])):
@@ -89,7 +93,9 @@ with open('C:\\Users\\Admin\\Downloads\\EC2.csv', 'r') as read_obj:
                             {'Key':row['Tag_Key_3'], 'Value':row['Tag_Value_3']},
                             {'Key':row['Tag_Key_4'], 'Value':row['Tag_Value_4']},
                             {'Key':row['Tag_Key_5'], 'Value':row['Tag_Value_5']},
-                            {'Key':row['Tag_Key_6'], 'Value':row['Tag_Value_6']}])
+                            {'Key':row['Tag_Key_6'], 'Value':row['Tag_Value_6']},
+                            {'Key':row['Tag_Key_7'], 'Value':row['Tag_Value_7']},
+                            {'Key':row['Tag_Key_8'], 'Value':row['Tag_Value_8']}])
 
             time.sleep(40)
 
