@@ -50,7 +50,7 @@ with open('C:\\Users\\Admin\\Downloads\\EC2.csv', 'r') as read_obj:
                     }
                 ],
                 NetworkInterfaces= [
-                    {'AssociatePublicIpAddress': False, 'DeviceIndex': 0, 'SubnetId': row['SubnetId'], 'Groups': str(row['SecurityGroupIds',]0 }
+                    {'AssociatePublicIpAddress': False, 'DeviceIndex': 0, 'SubnetId': row['SubnetId'], 'Groups': [str(row['SecurityGroupIds',]] }
                 ],
                 IamInstanceProfile={
                     'Name': row['IamInstanceProfile']
